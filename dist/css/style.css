@@ -81,13 +81,13 @@ select {
 .header {
   width: 100%;
   min-height: 75px;
-  height: 15vh;
+  height: 10vh;
 
   background-color: salmon;
 }
 
 .content__inner {
-  height: 75vh;
+  height: 80vh;
   display: flex;
   flex-direction: row;
 }
