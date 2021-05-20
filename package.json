@@ -1,13 +1,13 @@
 {
-  "name": "my-webpack-project",
+  "name": "todo-list",
   "version": "1.0.0",
-  "description": "My webpack project",
+  "description": "To Do List",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack",
     "watch": "webpack --watch",
-    "start": "webpack serve --open Firefox"
+    "start": "webpack serve --open firefox"
   },
   "repository": {
     "type": "git",

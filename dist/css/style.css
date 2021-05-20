@@ -72,22 +72,31 @@ select {
 }
 /* END Reset */
 
-.content {
-  min-width: 100%;
-  max-width: 100%;
+.page {
+  display: flex;
+  flex-direction: column;
+
+  width: 100vw;
+  min-width: 100vw;
+  max-width: 100vw;
+
+  height: 100vh;
+  min-height: 100vh;
+  max-height: 100vh;
+
   overflow: hidden;
 }
 
 .header {
   width: 100%;
-  min-height: 75px;
-  height: 10vh;
+  height: 10%;
+  min-height: 50px;
 
   background-color: salmon;
 }
 
-.content__inner {
-  height: 80vh;
+.content {  
+  height: 80%;    
   display: flex;
   flex-direction: row;
 }
@@ -104,10 +113,10 @@ select {
   background-color: slategray;
 }
 
-.footer {
+.footer {  
   width: 100%;
-  min-height: 75px;
-  height: 10vh;
+  height: 10%;   
+  min-height: 50px;
 
   background-color: tan;
 }
