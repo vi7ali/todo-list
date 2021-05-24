@@ -1,9 +1,9 @@
 'use strict';
 
-const todoUI = (() => {  
+const Ui = (() => {  
 
   function loadUI() {
-    document.getElementById('header-title').innerText = 'Hello, mr. thompson!'
+    document.getElementById('header-title').innerText = 'Hello, Mr. Thompson!'
   };
 
   return {
@@ -12,4 +12,4 @@ const todoUI = (() => {
 })();
 
 
-export default todoUI;
+export default Ui;

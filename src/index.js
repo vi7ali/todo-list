@@ -1,6 +1,6 @@
 'use strict';
 
-import ui from './ui'
-import task from './task'
+import Ui from './ui'
+import Task from './task'
 
-todoUI.loadUI();
+Ui.loadUI();
