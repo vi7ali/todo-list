@@ -1,3 +1,6 @@
-import myName from './test.js'
+'use strict';
 
-document.getElementById('header-title').innerText = myName('Thompson1');
+import ui from './ui'
+import task from './task'
+
+todoUI.loadUI();
