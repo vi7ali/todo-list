@@ -1,15 +1,14 @@
 'use strict';
 
-const Ui = (() => {  
+const UI = (() => {  
 
-  function loadUI() {
-    document.getElementById('header-title').innerText = 'Hello, Mr. Thompson!'
+  const loadUI = () => {
+    document.getElementById('header-title').innerText = 'Hello, Mr. Thompson!!';
   };
 
   return {
-    loadUI
+    loadUI    
   };
 })();
 
-
-export default Ui;
+export default UI;
