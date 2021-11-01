@@ -3,6 +3,7 @@
 const Task = (name, dueDate) => {  
   const getName = () => name;
   const getDate = () => dueDate;
+  const id = Date.now().toString(36)+Math.random().toString(36).substring(2);
 
   const setName = (newName) => {
     name = newName;
@@ -16,7 +17,8 @@ const Task = (name, dueDate) => {
     getName,
     getDate,
     setName,
-    setDate
+    setDate,    
+    id
   };
 };
 

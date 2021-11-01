@@ -2,12 +2,12 @@
 
 const UI = (() => {  
 
-  const loadUI = () => {
+  const load = () => {
     document.getElementById('header-title').innerText = 'Hello, Mr. Thompson!!';
   };
 
   return {
-    loadUI    
+    load    
   };
 })();
 
