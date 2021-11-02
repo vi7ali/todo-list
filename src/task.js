@@ -17,7 +17,7 @@ const Task = (name, dueDate) => {
     getName,
     getDate,
     setName,
-    setDate,    
+    setDate,
     id
   };
 };

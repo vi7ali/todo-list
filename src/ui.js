@@ -3,7 +3,8 @@
 const UI = (() => {  
 
   const load = () => {
-    document.getElementById('header-title').innerText = 'Hello, Mr. Thompson!!';
+    localStorage.setItem('Bla', 'hello');
+    console.log(localStorage.getItem('Bla'));
   };
 
   return {

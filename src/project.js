@@ -3,7 +3,7 @@
 const Project = (name, dueDate) => {  
   const getName = () => name;
   const getDate = () => dueDate;
-  let tasks = [];
+  const tasks = [];
 
   const setName = (newName) => {
     name = newName;
@@ -18,7 +18,7 @@ const Project = (name, dueDate) => {
   };
 
   const deleteTask = (task) => {
-    let result = tasks.filter(obj => {
+    const result = tasks.filter(obj => {
       return obj.id !== task.id;
     });
     tasks.splice(0, tasks.length, ...result);

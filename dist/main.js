@@ -16,7 +16,17 @@
   \**********************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _ui__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ui */ \"./src/ui.js\");\n/* harmony import */ var _task__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./task */ \"./src/task.js\");\n/* harmony import */ var _project__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./project */ \"./src/project.js\");\n\n\n\n\n\n_ui__WEBPACK_IMPORTED_MODULE_0__.default.load();\nvar task = (0,_task__WEBPACK_IMPORTED_MODULE_1__.default)('task', 'tomorrow');\nvar task2 = (0,_task__WEBPACK_IMPORTED_MODULE_1__.default)('task2', 'tomorrow');\nvar task3 = (0,_task__WEBPACK_IMPORTED_MODULE_1__.default)('task3', 'tomorrow');\nconsole.log(\"\".concat(task.getName(), \" \").concat(task.getDate()));\ntask.setName(\"Mr. Thompson\");\nconsole.log(\"\".concat(task.getName(), \" \").concat(task.getDate()));\nvar project1 = (0,_project__WEBPACK_IMPORTED_MODULE_2__.default)('project1', 'tomorrow');\nproject1.addTask(task);\nproject1.addTask(task2);\nproject1.addTask(task3);\nconsole.log(project1.tasks[0].id);\nconsole.log(project1.tasks[1].id);\nconsole.log(project1.tasks[2].id);\nproject1.deleteTask(task2);\nconsole.log(project1.tasks[0].id);\nconsole.log(project1.tasks[1].id);\nproject1.deleteTask(task);\nconsole.log(project1.tasks[0].id);\n\n//# sourceURL=webpack://todo-list/./src/index.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _ui__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ui */ \"./src/ui.js\");\n/* harmony import */ var _task__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./task */ \"./src/task.js\");\n/* harmony import */ var _project__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./project */ \"./src/project.js\");\n/* harmony import */ var _list__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./list */ \"./src/list.js\");\n\n\n\n\n\n\nvar list = (0,_list__WEBPACK_IMPORTED_MODULE_3__.default)();\nlist.setProjects('project1');\nconsole.log(list.getProjects());\nconsole.log(list);\n\n//# sourceURL=webpack://todo-list/./src/index.js?");
+
+/***/ }),
+
+/***/ "./src/list.js":
+/*!*********************!*\
+  !*** ./src/list.js ***!
+  \*********************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => __WEBPACK_DEFAULT_EXPORT__\n/* harmony export */ });\n/* harmony import */ var _storage__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./storage */ \"./src/storage.js\");\n\n\n\n\nvar List = function List() {\n  var projects = [];\n\n  var setProjects = function setProjects(data) {\n    projects = _storage__WEBPACK_IMPORTED_MODULE_0__.default.retrieveThing(data);\n  };\n\n  var getProjects = function getProjects() {\n    return projects;\n  };\n\n  return {\n    setProjects: setProjects,\n    getProjects: getProjects\n  };\n};\n\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (List);\n\n//# sourceURL=webpack://todo-list/./src/list.js?");
 
 /***/ }),
 
@@ -27,6 +37,16 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _ui_
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => __WEBPACK_DEFAULT_EXPORT__\n/* harmony export */ });\n\n\nfunction _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }\n\nfunction _nonIterableSpread() { throw new TypeError(\"Invalid attempt to spread non-iterable instance.\\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.\"); }\n\nfunction _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === \"string\") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === \"Object\" && o.constructor) n = o.constructor.name; if (n === \"Map\" || n === \"Set\") return Array.from(o); if (n === \"Arguments\" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }\n\nfunction _iterableToArray(iter) { if (typeof Symbol !== \"undefined\" && Symbol.iterator in Object(iter)) return Array.from(iter); }\n\nfunction _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }\n\nfunction _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }\n\nvar Project = function Project(name, dueDate) {\n  var getName = function getName() {\n    return name;\n  };\n\n  var getDate = function getDate() {\n    return dueDate;\n  };\n\n  var tasks = [];\n\n  var setName = function setName(newName) {\n    name = newName;\n  };\n\n  var setDate = function setDate(newDate) {\n    dueDate = newDate;\n  };\n\n  var addTask = function addTask(task) {\n    tasks.push(task);\n  };\n\n  var deleteTask = function deleteTask(task) {\n    var result = tasks.filter(function (obj) {\n      return obj.id !== task.id;\n    });\n    tasks.splice.apply(tasks, [0, tasks.length].concat(_toConsumableArray(result)));\n  };\n\n  return {\n    getName: getName,\n    getDate: getDate,\n    setName: setName,\n    setDate: setDate,\n    addTask: addTask,\n    deleteTask: deleteTask,\n    tasks: tasks\n  };\n};\n\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Project);\n\n//# sourceURL=webpack://todo-list/./src/project.js?");
+
+/***/ }),
+
+/***/ "./src/storage.js":
+/*!************************!*\
+  !*** ./src/storage.js ***!
+  \************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => __WEBPACK_DEFAULT_EXPORT__\n/* harmony export */ });\n\n\nvar Storage = function () {\n  var retrieveThing = function retrieveThing(key) {\n    return localStorage.getItem(key);\n  };\n\n  var storeThing = function storeThing(key, value) {\n    localStorage.setItem(key, value);\n  };\n\n  return {\n    storeThing: storeThing,\n    retrieveThing: retrieveThing\n  };\n}();\n\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Storage);\n\n//# sourceURL=webpack://todo-list/./src/storage.js?");
 
 /***/ }),
 
@@ -46,7 +66,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpac
   \*******************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => __WEBPACK_DEFAULT_EXPORT__\n/* harmony export */ });\n\n\nvar UI = function () {\n  var load = function load() {\n    document.getElementById('header-title').innerText = 'Hello, Mr. Thompson!!';\n  };\n\n  return {\n    load: load\n  };\n}();\n\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (UI);\n\n//# sourceURL=webpack://todo-list/./src/ui.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => __WEBPACK_DEFAULT_EXPORT__\n/* harmony export */ });\n\n\nvar UI = function () {\n  var load = function load() {\n    localStorage.setItem('Bla', 'hello');\n    console.log(localStorage.getItem('Bla'));\n  };\n\n  return {\n    load: load\n  };\n}();\n\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (UI);\n\n//# sourceURL=webpack://todo-list/./src/ui.js?");
 
 /***/ })
 
