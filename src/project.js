@@ -1,38 +1,40 @@
-'use strict';
+"use strict";
 
-const Project = (name, dueDate) => {  
-  const getName = () => name;
-  const getDate = () => dueDate;
+const Project = (name, dueDate) => {
+  let pName = name;
+  let pDueDate = dueDate;
   const tasks = [];
 
-  const setName = (newName) => {
-    name = newName;
-  };
-
-  const setDate = (newDate) => {
-    dueDate = newDate;
-  };
-
-  const addTask = (task) => {    
+  const addTask = (task) => {
     tasks.push(task);
   };
 
   const deleteTask = (task) => {
-    const result = tasks.filter(obj => {
+    const result = tasks.filter((obj) => {
       return obj.id !== task.id;
     });
     tasks.splice(0, tasks.length, ...result);
   };
-  
+
   return {
-    getName,
-    getDate,
-    setName,
-    setDate,
+    get name() {
+      return pName;
+    },
+
+    get dueDate() {
+      return pDueDate;
+    },
+
+    set name(newName) {
+      pName = newName;
+    },
+
+    set dueDate(newDate) {
+      pDueDate = newDate;
+    },
     addTask,
     deleteTask,
-    tasks
   };
 };
 
-export default Project
+export default Project;
