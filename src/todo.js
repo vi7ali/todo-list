@@ -4,16 +4,21 @@ import Storage from "./storage";
 import Project from "./project";
 import Task from "./task";
 
-const List = (() => {
-  let list = Storage.retrieveList();
+const Todo = (() => {
+  let list;
+
+  // Private Methods
 
   const updateList = () => {
     Storage.storeList(list);
     list = Storage.retrieveList();
-    //Add methods to parsed Project objects from JSON
+  };
+
+  const isValid = (name) => {
     for (const project in list) {
-      list[project] = Object.assign(Project(), list[project]);
+      if (project === name) return false;
     }
+    return true;
   };
 
   const createDefaultList = () => {
@@ -22,25 +27,31 @@ const List = (() => {
       project2: Project("Project 2", "tomorrow"),
       project3: Project("Project 3", "tomorrow"),
     };
-    for (const project in defaultList) {
-      defaultList[project].addTask(Task("task1", "1 hour", "Do task 1"));
-      defaultList[project].addTask(Task("task2", "2 hour", "Do task 2"));
-      defaultList[project].addTask(Task("task3", "3 hour", "Do task 3"));
+    const defaultTasks = [
+      Task("task1", "1 hour", "Do task 1"),
+      Task("task2", "2 hour", "Do task 2"),
+      Task("task3", "3 hour", "Do task 3"),
+    ];
+    for (let project in defaultList) {
+      defaultList[project].tasks = defaultTasks;
     }
     return defaultList;
   };
 
+  //Public Methods
+
   const loadList = () => {
+    list = Storage.retrieveList();
     if (list === null) {
       list = createDefaultList();
+      updateList();
     }
-    updateList();
   };
 
+  const getProject = (name) => list[name];
+
   const addProject = (name, dueDate) => {
-    //Replace all spaces and lowercase name for object property
     let projName = name.replaceAll(" ", "").toLowerCase();
-    //Check for projects with the same name
     if (isValid(projName)) {
       const newProject = Project(name, dueDate);
       list[projName] = newProject;
@@ -60,14 +71,18 @@ const List = (() => {
     }
   };
 
-  const isValid = (name) => {
-    for (const project in list) {
-      if (project === name) return false;
-    }
-    return true;
+  const addTask = (project, task) => {
+    list[project].tasks.push(task);
+    updateList();
   };
 
-  const getProject = (name) => list[name];
+  const deleteTask = (project, task) => {
+    const index = list[project].tasks.findIndex((el) => el.name === task);
+    if (index !== -1) {
+      list[project].tasks.splice(index, 1);
+      updateList();
+    }
+  };
 
   return {
     get list() {
@@ -77,7 +92,9 @@ const List = (() => {
     getProject,
     addProject,
     deleteProject,
+    addTask,
+    deleteTask,
   };
 })();
 
-export default List;
+export default Todo;

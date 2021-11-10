@@ -3,20 +3,15 @@
 const Project = (name, dueDate) => {
   let pName = name;
   let pDueDate = dueDate;
-  const tasks = [];
-
-  const addTask = (task) => {
-    tasks.push(task);
-  };
-
-  const deleteTask = (task) => {
-    const result = tasks.filter((obj) => {
-      return obj.id !== task.id;
-    });
-    tasks.splice(0, tasks.length, ...result);
-  };
+  let tasks = [];
 
   return {
+    get tasks() {
+      return tasks;
+    },
+    set tasks(newTasks) {
+      tasks = newTasks;
+    },
     get name() {
       return pName;
     },
@@ -32,8 +27,6 @@ const Project = (name, dueDate) => {
     set dueDate(newDate) {
       pDueDate = newDate;
     },
-    addTask,
-    deleteTask,
   };
 };
 
