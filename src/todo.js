@@ -14,7 +14,7 @@ const Todo = (() => {
     list = Storage.retrieveList();
   };
 
-  const isValid = (name) => {
+  const isValid = (name) => { //Is there a project with the same name?
     for (const project in list) {
       if (project === name) return false;
     }

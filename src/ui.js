@@ -1,14 +1,15 @@
 'use strict';
 
+import Todo from "./todo";
+
 const UI = (() => {  
 
-  const load = () => {
-    localStorage.setItem('Bla', 'hello');
-    console.log(localStorage.getItem('Bla'));
+  const init = () => {
+    Todo.loadList();
   };
 
   return {
-    load    
+    init
   };
 })();
 

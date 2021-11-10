@@ -5,7 +5,7 @@ import Task from "./task";
 import Project from "./project";
 import Todo from "./todo";
 
-Todo.loadList();
+UI.init();
 Todo.addProject("Project ONE", "sdfsd");
 Todo.addTask("projectone", Task("dfd", "dfsd", "sdfs"));
 console.log(Todo.getProject("project2").tasks[1].name);
