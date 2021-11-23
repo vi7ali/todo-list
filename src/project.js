@@ -3,7 +3,7 @@
 const Project = (name, dueDate) => {
   let pName = name;
   let pDueDate = dueDate;
-  let tasks = [];
+  let tasks = [];  
 
   return {
     get tasks() {

@@ -14,13 +14,6 @@ const Todo = (() => {
     list = Storage.retrieveList();
   };
 
-  const isValid = (name) => { //Is there a project with the same name?
-    for (const project in list) {
-      if (project === name) return false;
-    }
-    return true;
-  };
-
   const createDefaultList = () => {
     const defaultList = {
       project1: Project("Project 1", "tomorrow"),
@@ -48,11 +41,16 @@ const Todo = (() => {
     }
   };
 
-  const getProject = (name) => list[name];
+  const getProject = (name) => {
+    if (list[name]) {
+      return list[name];
+    }
+    return false;
+  };
 
   const addProject = (name, dueDate) => {
     let projName = name.replaceAll(" ", "").toLowerCase();
-    if (isValid(projName)) {
+    if (!getProject(projName)) {
       const newProject = Project(name, dueDate);
       list[projName] = newProject;
       updateList();
@@ -71,17 +69,49 @@ const Todo = (() => {
     }
   };
 
-  const addTask = (project, task) => {
-    list[project].tasks.push(task);
-    updateList();
+  const getTask = (project, taskName) => {
+    if (getProject(project)) {
+      const index = list[project].tasks.findIndex(
+        (task) => task.name === taskName
+      );
+      if (index !== -1) {
+        return list[project].tasks[index];
+      } else {
+        console.log(`Task ${taskName} not found in project ${project}`);
+        return;
+      }
+    }
+    console.log(`Project ${project} not found`);
   };
 
-  const deleteTask = (project, task) => {
-    const index = list[project].tasks.findIndex((el) => el.name === task);
-    if (index !== -1) {
-      list[project].tasks.splice(index, 1);
+  const addTask = (project, taskName, taskDate, taskDescription) => {
+    let task = Task(taskName, taskDate, taskDescription);
+    console.log(project);
+    console.log(getProject(project).tasks);
+    console.log(getProject(project).tasks.includes(getTask(taskName)));
+    if (getProject(project) && !getProject(project).tasks.includes(getTask(taskName))) {
+      list[project].tasks.push(task);
       updateList();
+      return;
     }
+    console.log(`Project ${project} not found`);
+  };
+
+  const deleteTask = (project, taskName) => {
+    if (getProject(project)) {
+      const index = list[project].tasks.findIndex(
+        (task) => task.name === taskName
+      );
+      if (index !== -1) {
+        list[project].tasks.splice(index, 1);
+        updateList();
+        return;
+      } else {
+        console.log(`Task ${taskName} not found in project ${project}`);
+        return;
+      }
+    }
+    console.log(`Project ${project} not found`);
   };
 
   return {
@@ -92,6 +122,7 @@ const Todo = (() => {
     getProject,
     addProject,
     deleteProject,
+    getTask,
     addTask,
     deleteTask,
   };
