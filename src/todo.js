@@ -44,18 +44,14 @@ const Todo = (() => {
   const getProject = (name) => {
     if (list[name]) {
       return list[name];
-    }
-    return false;
+    }    
   };
 
   const addProject = (name, dueDate) => {
-    let projName = name.replaceAll(" ", "").toLowerCase();
-    if (!getProject(projName)) {
-      const newProject = Project(name, dueDate);
-      list[projName] = newProject;
+    const projectName = name.replaceAll(" ", "").toLowerCase();
+    if (!getProject(projectName)) {      
+      list[projectName] = Project(name, dueDate);
       updateList();
-    } else {
-      console.log("Duplicated name");
     }
   };
 
@@ -69,49 +65,34 @@ const Todo = (() => {
     }
   };
 
-  const getTask = (project, taskName) => {
-    if (getProject(project)) {
-      const index = list[project].tasks.findIndex(
-        (task) => task.name === taskName
-      );
-      if (index !== -1) {
-        return list[project].tasks[index];
-      } else {
-        console.log(`Task ${taskName} not found in project ${project}`);
-        return;
-      }
+  const getTask = (projectName, taskName) => {
+    const project = getProject(projectName);
+    if (project) {
+      const task = project.tasks.find((task) => task.name === taskName);
+      if (task) return task;
     }
-    console.log(`Project ${project} not found`);
   };
 
-  const addTask = (project, taskName, taskDate, taskDescription) => {
-    let task = Task(taskName, taskDate, taskDescription);
-    console.log(project);
-    console.log(getProject(project).tasks);
-    console.log(getProject(project).tasks.includes(getTask(taskName)));
-    if (getProject(project) && !getProject(project).tasks.includes(getTask(taskName))) {
-      list[project].tasks.push(task);
-      updateList();
-      return;
-    }
-    console.log(`Project ${project} not found`);
-  };
-
-  const deleteTask = (project, taskName) => {
-    if (getProject(project)) {
-      const index = list[project].tasks.findIndex(
-        (task) => task.name === taskName
-      );
-      if (index !== -1) {
-        list[project].tasks.splice(index, 1);
-        updateList();
-        return;
-      } else {
-        console.log(`Task ${taskName} not found in project ${project}`);
-        return;
+  const addTask = (projectName, name, dueDate, description) => {
+    const project = getProject(projectName);
+    const taskName = name.replaceAll(" ", "").toLowerCase();
+    if (project) {
+      if (!project.tasks.some((task) => task.name === taskName)) {
+        project.tasks.push(Task(taskName, dueDate, description));
+        updateList();        
       }
     }
-    console.log(`Project ${project} not found`);
+  };
+
+  const deleteTask = (projectName, taskName) => {
+    const project = getProject(projectName);
+    if (project) {
+      const taskIndex = project.tasks.indexOf(taskName);
+      if (taskIndex !== -1) {
+        list[project].tasks.splice(taskIndex, 1);
+        updateList();        
+      }
+    }
   };
 
   return {

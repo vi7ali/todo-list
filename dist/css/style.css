@@ -183,7 +183,7 @@ select {
 .project__description {
   height: 150px;
   max-height: 500px;
-  padding: 5px 10px;
+  /* padding: 5px 10px; */
   color: #eaefff;
   border-radius: 0 0 10px 10px;
   background-color: #9fa9ff;

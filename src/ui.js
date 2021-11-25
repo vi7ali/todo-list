@@ -4,6 +4,7 @@ import Todo from "./todo";
 
 const UI = (() => {
   const asidePanel = document.getElementById("aside");
+  const addButton = document.getElementById("add");
 
   const init = () => {
     Todo.loadList();
@@ -13,9 +14,17 @@ const UI = (() => {
   };
 
   const populateProjects = () => {
+    document.querySelectorAll('.aside__project').forEach(e => e.remove());
     for (let project in Todo.list) {
       drawProjectItem(Todo.getProject(project));
     }
+  };
+
+  const drawNewProject = () => {
+    const projectName = "New Project";
+    const dueDate = "30.12.2023";    
+    Todo.addProject(projectName, dueDate);
+    populateProjects();
   };
 
   const drawProjectItem = (project) => {
@@ -49,9 +58,14 @@ const UI = (() => {
     const desc = document.createElement("p");
     desc.classList.add("project__description");
     desc.classList.add("project__description--hidden");
-    desc.innerText = project.dueDate;
+    desc.innerHTML = `<ul> 
+                        <li>Duedate: ${project.dueDate}</li>
+                        <li>Tasks: ${project.tasks.length}</li>
+                      </ul>`;
     return desc;
   };
+
+
 
   const createProjectContainer = (project) => {
     const container = document.createElement("div");
@@ -64,8 +78,8 @@ const UI = (() => {
   };
 
   function assignListeners() {
-    console.log();
-  }
+    addButton.addEventListener('click', drawNewProject);
+  };
 
   return {
     init,
