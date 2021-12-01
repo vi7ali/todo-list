@@ -28,6 +28,11 @@ const UI = (() => {
     populateProjects();
   };
 
+  const removeProject = (name) => {
+    Todo.deleteProject(name);
+    populateProjects();
+  };
+
   const drawProjectItem = (project) => {
     let projectContainer = Components.projectContainer(project);
     let projectTitle = Components.projectTitle(project);    
@@ -53,6 +58,8 @@ const UI = (() => {
 
   return {
     init,
+    drawNewProject,
+    removeProject
   };
 })();
 

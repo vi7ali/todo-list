@@ -16,14 +16,14 @@ const Todo = (() => {
 
   const createDefaultList = () => {
     const defaultList = {
-      project1: Project("Project 1", "tomorrow"),
-      project2: Project("Project 2", "tomorrow"),
-      project3: Project("Project 3", "tomorrow"),
+      "Project 1": Project("Project 1", "tomorrow"),
+      "Project 2": Project("Project 2", "tomorrow"),
+      "Project 3": Project("Project 3", "tomorrow"),
     };
     const defaultTasks = [
-      Task("task1", "1 hour", "Do task 1"),
-      Task("task2", "2 hour", "Do task 2"),
-      Task("task3", "3 hour", "Do task 3"),
+      Task("Task 1", "1 hour", "Do task 1"),
+      Task("Task 2", "2 hour", "Do task 2"),
+      Task("Task 3", "3 hour", "Do task 3"),
     ];
     for (let project in defaultList) {
       defaultList[project].tasks = defaultTasks;
@@ -31,66 +31,62 @@ const Todo = (() => {
     return defaultList;
   };
 
+  const projectExists = (project) => {
+    if (list[project]) return true;
+    return false;
+  };
+
+  const taskExists = (project, task) => {
+    if (list[project].tasks.some((t) => t === task)) return true;
+    return false;
+  };
+
   //Public Methods
 
   const loadList = () => {
     list = Storage.retrieveList();
-    if (list === null) {
+    if (!list) {
       list = createDefaultList();
       updateList();
     }
   };
 
   const getProject = (name) => {
-    if (list[name]) {
-      return list[name];
-    }    
+    return list[name];
   };
 
   const addProject = (name, dueDate) => {
-    const projectName = name.replaceAll(" ", "").toLowerCase();
-    if (!getProject(projectName)) {      
-      list[projectName] = Project(name, dueDate);
+    if (!projectExists(name)) {
+      list[name] = Project(name, dueDate);
       updateList();
     }
   };
 
-  const deleteProject = (name) => {
-    for (const project in list) {
-      if (project === name) {
-        delete list[project];
+  const deleteProject = (project) => {
+    if (projectExists(project)) {
+      delete list[project];
+      updateList();
+    }
+  };
+
+  const getTask = (project, task) => {
+    return list[project].tasks.find((t) => t.name === task);
+  };
+
+  const addTask = (project, name, dueDate, description) => {
+    if (projectExists(project)) {
+      if (!taskExists(name)) {
+        project.tasks.push(Task(name, dueDate, description));
         updateList();
-        return;
       }
     }
   };
 
-  const getTask = (projectName, taskName) => {
-    const project = getProject(projectName);
-    if (project) {
-      const task = project.tasks.find((task) => task.name === taskName);
-      if (task) return task;
-    }
-  };
-
-  const addTask = (projectName, name, dueDate, description) => {
-    const project = getProject(projectName);
-    const taskName = name.replaceAll(" ", "").toLowerCase();
-    if (project) {
-      if (!project.tasks.some((task) => task.name === taskName)) {
-        project.tasks.push(Task(taskName, dueDate, description));
-        updateList();        
-      }
-    }
-  };
-
-  const deleteTask = (projectName, taskName) => {
-    const project = getProject(projectName);
-    if (project) {
-      const taskIndex = project.tasks.indexOf(taskName);
-      if (taskIndex !== -1) {
-        list[project].tasks.splice(taskIndex, 1);
-        updateList();        
+  const deleteTask = (project, task) => {
+    if (projectExists(project)) {
+      if (taskExists(task)) {
+        list[project].tasks.splice(list[project].tasks.indexOf(task), 1);
+        updateList();
       }
     }
   };
