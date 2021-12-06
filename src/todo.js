@@ -55,18 +55,14 @@ const Todo = (() => {
     return list[name];
   };
 
-  const addProject = (name, dueDate) => {
-    if (!projectExists(name)) {
-      list[name] = Project(name, dueDate);
-      updateList();
-    }
+  const addProject = (name, dueDate) => {    
+    list[name] = Project(name, dueDate);
+    updateList();    
   };
 
-  const deleteProject = (project) => {
-    if (projectExists(project)) {
-      delete list[project];
-      updateList();
-    }
+  const deleteProject = (project) => {    
+    delete list[project];
+    updateList();    
   };
 
   const getTask = (project, task) => {
@@ -102,6 +98,7 @@ const Todo = (() => {
     getTask,
     addTask,
     deleteTask,
+    projectExists
   };
 })();
 
