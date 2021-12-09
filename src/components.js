@@ -4,10 +4,10 @@ const Components = (() => {
   const projectItem = (project) => {
     const projectC = projectContainer(project);
     const projectT = projectTitle(project);
-    const projectD = projectDescription(project);
+    const projectD = projectDescription(project);    
 
     projectC.appendChild(projectT);
-    projectC.appendChild(projectD);
+    projectC.appendChild(projectD);    
 
     return projectC;
   };
@@ -31,6 +31,7 @@ const Components = (() => {
 
   const projectDescription = (project) => {
     const desc = document.createElement("p");
+    const buttons = descriptionButtons()
     desc.classList.add("project__description");
     desc.classList.add("project__description--hidden");
     desc.innerHTML = `<ul class="project__list"> 
@@ -41,15 +42,27 @@ const Components = (() => {
                         <li class="list__item">
                           <span>Tasks: </span>
                           <span>${project.tasks.length}</span>
-                        </li>
-                        <li class="list__item">
-                          <div class="buttons_container">
-                            <button class="project__button project__button--x"></button>
-                            <button class="project__button project__button--v"></button>
-                          </div
-                        </li>
+                        </li>                        
                       </ul>`;
+    desc.appendChild(buttons);
     return desc;
+  };
+
+  const descriptionButtons = () => {
+    const buttons = document.createElement("div");
+    const vButton = document.createElement("button");
+    const xButton = document.createElement("button");
+
+    buttons.classList.add("buttons_container");
+    vButton.classList.add("project__button");
+    xButton.classList.add("project__button");
+    vButton.classList.add("project__button--v");
+    xButton.classList.add("project__button--x");
+
+    buttons.appendChild(xButton);
+    buttons.appendChild(vButton);    
+
+    return buttons;
   };
 
   const projectModal = () => {
@@ -64,6 +77,7 @@ const Components = (() => {
                             <input class="input__item" id="newProjectName" name="newProjectName" type="text" required>
                             <label for="newProjectDueDate">Deadline:</label>
                             <input id="newProjectDueDate" class="input__item" type="date" value="2022-01-01">`;
+
     modalButtons.innerHTML = `<button id="createProject">Create!</button>`;
 
     modal.classList.add("modal");
@@ -79,9 +93,47 @@ const Components = (() => {
     return modal;
   };
 
+  const projectDetails = (project) => {
+    const details = document.createElement("div");
+    const detailsContainer = document.createElement("div");
+    const detailsProjectTitle = document.createElement("h2");
+    const detailsDueDate = document.createElement("p");
+    const tasksContainer = document.createElement("div");
+    const tasksTitle = document.createElement("h3");
+    const tasksGrid = document.createElement("div");
+    const newTask = document.createElement("button");
+
+    details.classList.add("details");
+    detailsContainer.classList.add("details__container");
+    detailsProjectTitle.classList.add("details__tile");
+    detailsDueDate.classList.add("details__date");
+    tasksContainer.classList.add("tasks");
+    tasksTitle.classList.add("tasks__title");
+    tasksGrid.classList.add("tasks__grid");
+    newTask.classList.add("aside__add");
+
+    detailsProjectTitle.innerText = `${project.name}`;
+    detailsDueDate.innerText = `Due date: ${project.dueDate}`;
+    tasksTitle.innerText = `Tasks ${project.tasks.length}`;
+    newTask.innerText = `+`;
+
+    tasksContainer.appendChild(tasksTitle);
+    tasksContainer.appendChild(newTask);
+    tasksContainer.appendChild(tasksGrid);
+    
+    detailsContainer.appendChild(detailsProjectTitle);
+    detailsContainer.appendChild(detailsDueDate);
+    detailsContainer.appendChild(tasksContainer);
+
+    details.appendChild(detailsContainer);
+
+    return details;
+  };
+
   return {
     projectItem,
     projectModal,
+    projectDetails
   };
 })();
 

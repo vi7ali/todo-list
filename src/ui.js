@@ -2,6 +2,7 @@
 
 import Todo from "./todo";
 import Components from "./components";
+import { el } from "date-fns/locale";
 
 const UI = (() => {
   const asidePanel = document.getElementById("aside");
@@ -20,12 +21,15 @@ const UI = (() => {
     for (let project in Todo.list) {
       drawProjectItem(Todo.getProject(project));
     }
+    document
+      .querySelectorAll(".project__button--x")
+      .forEach((e) => e.addEventListener("click", removeProject));
   };
 
   const drawProjectItem = (project) => {
     const projectItem = Components.projectItem(project);
     asidePanel.appendChild(projectItem);
-    projectItem.addEventListener("click", toggleProject);
+    projectItem.firstChild.addEventListener("click", toggleProject);
   };
 
   const drawNewProject = () => {
@@ -68,27 +72,56 @@ const UI = (() => {
   };
 
   const addProject = () => {
-    const projectName = document.getElementById("newProjectName");
-    const projectDueDate = document.getElementById("newProjectDueDate");
-    if (!Todo.projectExists(projectName.value) && projectName.value !== "") {
-      Todo.addProject(projectName.value, projectDueDate.value);
+    const projectName = document.getElementById("newProjectName").value;
+    const projectDueDate = document.getElementById("newProjectDueDate").value;
+    if (
+      !Todo.projectExists(projectName) &&
+      projectName.replaceAll(" ", "") !== ""
+    ) {
+      Todo.addProject(projectName, projectDueDate);
       populateProjects();
       closeProjectModal();
+      highlightProject(document.getElementById(Todo.list[projectName].name));
     } else {
       projectName.style.borderColor = "red";
     }
   };
 
-  const removeProject = (name) => {
-    Todo.deleteProject(name);
+  const removeProject = (e) => {
+    let currentElement = e.target;
+    while (currentElement.className !== "aside__project") {
+      currentElement = currentElement.parentNode;
+    }
+    Todo.deleteProject(currentElement.firstChild.innerText);
+    document.querySelector(".details").remove();
     populateProjects();
   };
 
+  const highlightProject = (project) => {    
+    hideAllProjects();
+    project.childNodes[0].classList.toggle("project__title--active");
+    project.childNodes[1].classList.toggle("project__description--hidden");
+    openProjectDetails(project.childNodes[0].innerText);
+  };
+
+  const hideAllProjects = () => {
+    const allProjects = document.querySelectorAll(".aside__project");
+    allProjects.forEach((el) => {
+      el.childNodes[0].classList.remove("project__title--active");
+      el.childNodes[1].classList.add("project__description--hidden");
+    });
+  };
+
+  const openProjectDetails = (projectName) => {
+    if (document.querySelector(".details")) {
+      document.querySelector(".details").remove();
+    }
+    const details = Components.projectDetails(Todo.list[projectName]);
+    main.appendChild(details);
+  };
+
   const toggleProject = (e) => {
-    e.target.classList.toggle("project__title--active");
-    e.target.nextElementSibling.classList.toggle(
-      "project__description--hidden"
-    );
+    highlightProject(e.target.parentNode);
   };
 
   function assignListeners() {
