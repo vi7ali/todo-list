@@ -39,16 +39,14 @@ const UI = (() => {
 
   const openProjectModal = () => {
     const projectModal = Components.projectModal();
-    document.getElementsByTagName("body")[0].appendChild(projectModal);
-    page.classList.toggle("page--opaque");
+    document.getElementsByTagName("body")[0].appendChild(projectModal);    
     window.getComputedStyle(projectModal).opacity; // To trigger transition after appendChild
     projectModal.classList.toggle("modal--hidden");
   };
 
   const closeProjectModal = () => {
     const modal = document.getElementById("modal");
-    modal.classList.toggle("modal--hidden");
-    page.classList.toggle("page--opaque");
+    modal.classList.toggle("modal--hidden");    
     removeListenersModal();
     modal.remove();
   };

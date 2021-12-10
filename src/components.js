@@ -66,12 +66,13 @@ const Components = (() => {
   };
 
   const projectModal = () => {
+    const modalBackground = document.createElement("div");
     const modal = document.createElement("div");
     const modalTitle = document.createElement("div");
     const modalInput = document.createElement("div");
     const modalButtons = document.createElement("buttons");
 
-    modal.setAttribute("id", "modal");
+    modalBackground.setAttribute("id", "modal");
     modalTitle.innerHTML = `<h2 class="modal__titleText">Create new project</h2><button id="closeModal" class="modal__x">X</button>`;
     modalInput.innerHTML = `<label for="newProjectName">Project name:</label>
                             <input class="input__item" id="newProjectName" name="newProjectName" type="text" required>
@@ -80,8 +81,9 @@ const Components = (() => {
 
     modalButtons.innerHTML = `<button id="createProject">Create!</button>`;
 
-    modal.classList.add("modal");
-    modal.classList.add("modal--hidden");
+    modalBackground.classList.add("modal__background");
+    modalBackground.classList.add("modal--hidden");
+    modal.classList.add("modal");    
     modalTitle.classList.add("modal__title");
     modalInput.classList.add("modal__input");
     modalButtons.classList.add("modal__buttons");
@@ -89,8 +91,9 @@ const Components = (() => {
     const modalELements = [modalTitle, modalInput, modalButtons];
 
     modalELements.forEach((e) => modal.appendChild(e));
+    modalBackground.appendChild(modal);
 
-    return modal;
+    return modalBackground;
   };
 
   const projectDetails = (project) => {
@@ -111,10 +114,11 @@ const Components = (() => {
     tasksTitle.classList.add("tasks__title");
     tasksGrid.classList.add("tasks__grid");
     newTask.classList.add("aside__add");
+    newTask.classList.add("tasks__add");
 
-    detailsProjectTitle.innerText = `${project.name}`;
+    detailsProjectTitle.innerText = `Project "${project.name}"`;
     detailsDueDate.innerText = `Due date: ${project.dueDate}`;
-    tasksTitle.innerText = `Tasks ${project.tasks.length}`;
+    tasksTitle.innerText = `Tasks: ${project.tasks.length}`;
     newTask.innerText = `+`;
 
     tasksContainer.appendChild(tasksTitle);
