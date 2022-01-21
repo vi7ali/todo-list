@@ -7,7 +7,6 @@ import { el } from "date-fns/locale";
 const UI = (() => {
   const asidePanel = document.getElementById("aside");
   const addButton = document.getElementById("add");
-  const page = document.getElementById("page");
   const main = document.getElementById("main");
 
   const init = () => {
@@ -24,6 +23,9 @@ const UI = (() => {
     document
       .querySelectorAll(".project__button--x")
       .forEach((e) => e.addEventListener("click", removeProject));
+    document
+      .querySelectorAll(".project__button--v")
+      .forEach((e) => e.addEventListener("click", removeProject));
   };
 
   const drawProjectItem = (project) => {
@@ -39,14 +41,14 @@ const UI = (() => {
 
   const openProjectModal = () => {
     const projectModal = Components.projectModal();
-    document.getElementsByTagName("body")[0].appendChild(projectModal);    
+    document.getElementsByTagName("body")[0].appendChild(projectModal);
     window.getComputedStyle(projectModal).opacity; // To trigger transition after appendChild
     projectModal.classList.toggle("modal--hidden");
   };
 
   const closeProjectModal = () => {
     const modal = document.getElementById("modal");
-    modal.classList.toggle("modal--hidden");    
+    modal.classList.toggle("modal--hidden");
     removeListenersModal();
     modal.remove();
   };
@@ -81,7 +83,7 @@ const UI = (() => {
       closeProjectModal();
       highlightProject(document.getElementById(Todo.list[projectName].name));
     } else {
-      projectName.style.borderColor = "red";
+      document.getElementById("newProjectName").style.borderColor = "red";
     }
   };
 
@@ -95,7 +97,7 @@ const UI = (() => {
     populateProjects();
   };
 
-  const highlightProject = (project) => {    
+  const highlightProject = (project) => {
     hideAllProjects();
     project.childNodes[0].classList.toggle("project__title--active");
     project.childNodes[1].classList.toggle("project__description--hidden");
@@ -111,11 +113,44 @@ const UI = (() => {
   };
 
   const openProjectDetails = (projectName) => {
-    if (document.querySelector(".details")) {
-      document.querySelector(".details").remove();
+    const projectDetails = document.querySelector(".details");
+    if (projectDetails) {
+      projectDetails.remove();
     }
-    const details = Components.projectDetails(Todo.list[projectName]);
-    main.appendChild(details);
+    const newDetails = Components.projectDetails(Todo.list[projectName]);
+    main.appendChild(newDetails);
+
+    addListenersDetails();
+  };
+
+  const addListenersDetails = () => {
+    const vButtons = document.querySelectorAll(".task__button ");
+    const addTaskButton = document.querySelector(".tasks__add");
+
+    addTaskButton.addEventListener("click", addTask);
+
+    if (vButtons) {
+      vButtons.forEach((e) => e.addEventListener("click", deleteTask));
+    }
+  };
+
+  const addTask = (e) => {
+    //TODO
+  };
+
+  const deleteTask = (e) => {
+    const projName = Todo.getProject(
+      document.querySelector(".details__title").innerText
+    );
+    const taskName = e.target.id;
+    Todo.deleteTask(projName.name, taskName);
+    populateProjects();
+    highlightProject(
+      document.getElementById(
+        Todo.list[projName.name].name.replaceAll(" ", "").toLowerCase()
+      )
+    );
+    openProjectDetails(projName.name);
   };
 
   const toggleProject = (e) => {

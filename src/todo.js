@@ -36,8 +36,8 @@ const Todo = (() => {
     return false;
   };
 
-  const taskExists = (project, task) => {
-    if (list[project].tasks.some((t) => t === task)) return true;
+  const taskExists = (project, task) => {    
+    if (list[project].tasks.some((t) => t.name === task)) return true;
     return false;
   };
 
@@ -55,14 +55,14 @@ const Todo = (() => {
     return list[name];
   };
 
-  const addProject = (name, dueDate) => {    
+  const addProject = (name, dueDate) => {
     list[name] = Project(name, dueDate);
-    updateList();    
+    updateList();
   };
 
-  const deleteProject = (project) => {    
+  const deleteProject = (project) => {
     delete list[project];
-    updateList();    
+    updateList();
   };
 
   const getTask = (project, task) => {
@@ -78,11 +78,14 @@ const Todo = (() => {
     }
   };
 
-  const deleteTask = (project, task) => {
-    if (projectExists(project)) {
-      if (taskExists(task)) {
-        list[project].tasks.splice(list[project].tasks.indexOf(task), 1);
-        updateList();
+  const deleteTask = (project, task) => {    
+    if (taskExists(project, task)) {
+      for (let i = 0; i < list[project].tasks.length; i++) {
+        if (list[project].tasks[i].name === task) {
+          list[project].tasks.splice(i, 1);
+          updateList();
+          break;
+        }
       }
     }
   };
@@ -98,7 +101,7 @@ const Todo = (() => {
     getTask,
     addTask,
     deleteTask,
-    projectExists
+    projectExists,
   };
 })();
 

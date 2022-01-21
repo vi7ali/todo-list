@@ -96,35 +96,84 @@ const Components = (() => {
     return modalBackground;
   };
 
-  const projectDetails = (project) => {
-    const details = document.createElement("div");
-    const detailsContainer = document.createElement("div");
-    const detailsProjectTitle = document.createElement("h2");
-    const detailsDueDate = document.createElement("p");
+  const createTask = (task) => {
+    const taskCard = document.createElement('div');
+    const taskName = document.createElement('div');
+    const taskDate = document.createElement('div');
+    const taskDesc = document.createElement('div');
+    const vButton = document.createElement("button");    
+    
+    taskName.innerText = task.name;
+    taskDate.innerText = `Due Date: ${task.dueDate}`;
+    taskDesc.innerText = `Description: ${task.description}`;
+
+    taskName.classList.add('task__name');
+    taskDate.classList.add('task__date');
+    taskDesc.classList.add('task__desc');
+    taskCard.classList.add('task__container');
+    vButton.classList.add("project__button");    
+    vButton.classList.add("task__button");
+    
+    vButton.setAttribute('id', `${task.name}`);
+
+    taskCard.appendChild(taskName);
+    taskCard.appendChild(taskDate);
+    taskCard.appendChild(taskDesc);
+    taskCard.appendChild(vButton);
+
+    
+
+    return taskCard;
+  };
+
+  const createTasksGrid = (tasks) => {
+    const tasksGrid = document.createElement("div");    
+
+    tasksGrid.classList.add("tasks__grid");
+    
+    for (let i=0; i<tasks.length; i++) {      
+      let task = createTask(tasks[i]);
+      tasksGrid.appendChild(task);      
+    };    
+
+    return tasksGrid;
+  };
+
+  const tasksDetails = (tasks) => {
     const tasksContainer = document.createElement("div");
     const tasksTitle = document.createElement("h3");
-    const tasksGrid = document.createElement("div");
+    const tasksGrid = createTasksGrid(tasks);
     const newTask = document.createElement("button");
 
-    details.classList.add("details");
-    detailsContainer.classList.add("details__container");
-    detailsProjectTitle.classList.add("details__tile");
-    detailsDueDate.classList.add("details__date");
     tasksContainer.classList.add("tasks");
-    tasksTitle.classList.add("tasks__title");
-    tasksGrid.classList.add("tasks__grid");
     newTask.classList.add("aside__add");
-    newTask.classList.add("tasks__add");
+    newTask.classList.add("tasks__add");    
 
-    detailsProjectTitle.innerText = `Project "${project.name}"`;
-    detailsDueDate.innerText = `Due date: ${project.dueDate}`;
-    tasksTitle.innerText = `Tasks: ${project.tasks.length}`;
+    tasksTitle.innerText = `Tasks: ${tasks.length}`;
     newTask.innerText = `+`;
 
     tasksContainer.appendChild(tasksTitle);
     tasksContainer.appendChild(newTask);
     tasksContainer.appendChild(tasksGrid);
-    
+
+    return tasksContainer;
+  };
+
+  const projectDetails = (project) => {
+    const details = document.createElement("div");
+    const detailsContainer = document.createElement("div");
+    const detailsProjectTitle = document.createElement("h2");
+    const detailsDueDate = document.createElement("p");
+    const tasksContainer = tasksDetails(project.tasks);
+
+    details.classList.add("details");
+    detailsContainer.classList.add("details__container");
+    detailsProjectTitle.classList.add("details__title");
+    detailsDueDate.classList.add("details__date");
+
+    detailsProjectTitle.innerText = project.name;
+    detailsDueDate.innerText = `Due date: ${project.dueDate}`;
+
     detailsContainer.appendChild(detailsProjectTitle);
     detailsContainer.appendChild(detailsDueDate);
     detailsContainer.appendChild(tasksContainer);
