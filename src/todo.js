@@ -32,12 +32,12 @@ const Todo = (() => {
   };
 
   const projectExists = (project) => {
-    if (list[project]) return true;
+    if (list[project.name] || list[project]) return true;
     return false;
   };
 
   const taskExists = (project, task) => {    
-    if (list[project].tasks.some((t) => t.name === task)) return true;
+    if (list[project.name].tasks.some((t) => t.name === task)) return true;
     return false;
   };
 
@@ -56,8 +56,10 @@ const Todo = (() => {
   };
 
   const addProject = (name, dueDate) => {
-    list[name] = Project(name, dueDate);
-    updateList();
+    if (!getProject(name)) {
+      list[name] = Project(name, dueDate);
+      updateList();
+    }    
   };
 
   const deleteProject = (project) => {
@@ -65,13 +67,13 @@ const Todo = (() => {
     updateList();
   };
 
-  const getTask = (project, task) => {
-    return list[project].tasks.find((t) => t.name === task);
+  const getTask = (project, task) => {    
+    return list[project.name].tasks.find((t) => t.name === task);
   };
 
   const addTask = (project, name, dueDate, description) => {
     if (projectExists(project)) {
-      if (!taskExists(name)) {
+      if (!taskExists(project, name)) {
         project.tasks.push(Task(name, dueDate, description));
         updateList();
       }
@@ -80,9 +82,9 @@ const Todo = (() => {
 
   const deleteTask = (project, task) => {    
     if (taskExists(project, task)) {
-      for (let i = 0; i < list[project].tasks.length; i++) {
-        if (list[project].tasks[i].name === task) {
-          list[project].tasks.splice(i, 1);
+      for (let i = 0; i < list[project.name].tasks.length; i++) {
+        if (list[project.name].tasks[i].name === task) {
+          list[project.name].tasks.splice(i, 1);
           updateList();
           break;
         }
@@ -101,7 +103,7 @@ const Todo = (() => {
     getTask,
     addTask,
     deleteTask,
-    projectExists,
+    projectExists
   };
 })();
 

@@ -5,83 +5,31 @@ import Components from "./components";
 import { el } from "date-fns/locale";
 
 const UI = (() => {
+
+  // Private
+
   const asidePanel = document.getElementById("aside");
   const addButton = document.getElementById("add");
   const main = document.getElementById("main");
 
-  const init = () => {
-    Todo.loadList();
-    assignListeners();
-    populateProjects();
-  };
-
   const populateProjects = () => {
+    removeListenersAside();
     document.querySelectorAll(".aside__project").forEach((e) => e.remove());
     for (let project in Todo.list) {
       drawProjectItem(Todo.getProject(project));
     }
-    document
-      .querySelectorAll(".project__button--x")
-      .forEach((e) => e.addEventListener("click", removeProject));
-    document
-      .querySelectorAll(".project__button--v")
-      .forEach((e) => e.addEventListener("click", removeProject));
-  };
-
-  const drawProjectItem = (project) => {
-    const projectItem = Components.projectItem(project);
-    asidePanel.appendChild(projectItem);
-    projectItem.firstChild.addEventListener("click", toggleProject);
-  };
-
-  const drawNewProject = () => {
-    openProjectModal();
-    addListenersModal();
-  };
-
-  const openProjectModal = () => {
-    const projectModal = Components.projectModal();
-    document.getElementsByTagName("body")[0].appendChild(projectModal);
-    window.getComputedStyle(projectModal).opacity; // To trigger transition after appendChild
-    projectModal.classList.toggle("modal--hidden");
-  };
-
-  const closeProjectModal = () => {
-    const modal = document.getElementById("modal");
-    modal.classList.toggle("modal--hidden");
-    removeListenersModal();
-    modal.remove();
-  };
-
-  const addListenersModal = () => {
-    document
-      .getElementById("closeModal")
-      .addEventListener("click", closeProjectModal);
-    document
-      .getElementById("createProject")
-      .addEventListener("click", addProject);
-  };
-
-  const removeListenersModal = () => {
-    document
-      .getElementById("closeModal")
-      .removeEventListener("click", closeProjectModal);
-    document
-      .getElementById("createProject")
-      .removeEventListener("click", addProject);
+    addListenersAside();
   };
 
   const addProject = () => {
     const projectName = document.getElementById("newProjectName").value;
     const projectDueDate = document.getElementById("newProjectDueDate").value;
-    if (
-      !Todo.projectExists(projectName) &&
-      projectName.replaceAll(" ", "") !== ""
-    ) {
+
+    if (projectName.replaceAll(" ", "") !== "" && !Todo.projectExists(projectName)) {
       Todo.addProject(projectName, projectDueDate);
       populateProjects();
-      closeProjectModal();
-      highlightProject(document.getElementById(Todo.list[projectName].name));
+      closeModal();
+      highlightProject(Todo.getProject(projectName));
     } else {
       document.getElementById("newProjectName").style.borderColor = "red";
     }
@@ -93,16 +41,79 @@ const UI = (() => {
       currentElement = currentElement.parentNode;
     }
     Todo.deleteProject(currentElement.firstChild.innerText);
+    removeListenersDetails();
     document.querySelector(".details").remove();
     populateProjects();
   };
 
-  const highlightProject = (project) => {
-    hideAllProjects();
-    project.childNodes[0].classList.toggle("project__title--active");
-    project.childNodes[1].classList.toggle("project__description--hidden");
-    openProjectDetails(project.childNodes[0].innerText);
+  const addTask = () => {
+    const taskName = document.getElementById("newTaskName").value;
+    const taskDueDate = document.getElementById("newTaskDueDate").value;
+    const project = Todo.getProject(
+      document.querySelector(".details__title").innerText
+    );
+
+    if (taskName.replaceAll(" ", "") !== "") {
+      Todo.addTask(project, taskName, taskDueDate, "Bla");
+      closeModal();
+      populateProjects();
+      highlightProject(project);
+    } else {
+      document.getElementById("newTaskName").style.borderColor = "red";
+    }
   };
+
+  const removeTask = (e) => {
+    const proj = Todo.getProject(
+      document.querySelector(".details__title").innerText
+    );    
+    const task = Todo.getTask(proj, e.target.id);
+
+    Todo.deleteTask(proj, task.name);
+    populateProjects();
+    highlightProject(proj);
+    openProjectDetails(proj);
+  };
+
+  const highlightProject = (project) => {
+    const projectNode = document.getElementById(project.id);
+    hideAllProjects();
+    projectNode.childNodes[0].classList.toggle("project__title--active");
+    projectNode.childNodes[1].classList.toggle("project__description--hidden");
+    openProjectDetails(project);
+  };
+
+  const drawProjectItem = (project) => {
+    const projectItem = Components.createProjectItem(project);
+    asidePanel.appendChild(projectItem);
+  };
+
+  const drawNewProject = () => {
+    openModal("Project");
+    addListenersModal("Project");
+  };
+
+  const drawNewTask = () => {
+    openModal("Task");
+    addListenersModal("Task");
+  };
+
+  const openModal = (category) => {
+    const modal = Components.createModal(category);
+    document.getElementsByTagName("body")[0].appendChild(modal);
+    window.getComputedStyle(modal).opacity; // To trigger transition after appendChild
+    modal.classList.toggle("modal--hidden");
+  };
+
+  const closeModal = () => {
+    const modal = document.getElementById("modal");    
+    window.getComputedStyle(modal).backgroundColor; // To trigger transition after appendChild
+    modal.classList.toggle("modal--hidden");    
+    removeListenersModal();
+    modal.remove();
+  };
+
+
 
   const hideAllProjects = () => {
     const allProjects = document.querySelectorAll(".aside__project");
@@ -112,59 +123,103 @@ const UI = (() => {
     });
   };
 
-  const openProjectDetails = (projectName) => {
+  const openProjectDetails = (project) => {
     const projectDetails = document.querySelector(".details");
     if (projectDetails) {
+      removeListenersDetails();
       projectDetails.remove();
     }
-    const newDetails = Components.projectDetails(Todo.list[projectName]);
+    const newDetails = Components.createProjectDetails(project);
     main.appendChild(newDetails);
-
     addListenersDetails();
+  };
+
+
+
+  const toggleProject = (e) => {    
+    const proj = Todo.getProject(e.target.innerText);
+    highlightProject(proj);
+  };
+
+  const addListenersAside = () => {
+    addButton.addEventListener("click", drawNewProject);
+    document.querySelectorAll(".project__title").forEach((proj) => {
+      proj.addEventListener("click", toggleProject);
+    });
+    document.querySelectorAll(".project__button--x").forEach((but) => {
+      but.addEventListener("click", removeProject);
+    });
+    document.querySelectorAll(".project__button--v").forEach((but) => {
+      but.addEventListener("click", removeProject);
+    });    
+  };
+
+  const removeListenersAside = () => {
+    addButton.removeEventListener("click", drawNewProject);
+    document.querySelectorAll(".project__title").forEach((proj) => {
+      proj.removeEventListener("click", toggleProject);
+    });
+    document.querySelectorAll(".project__button--x").forEach((but) => {
+      but.removeEventListener("click", removeProject);
+    });
+    document.querySelectorAll(".project__button--v").forEach((but) => {
+      but.removeEventListener("click", removeProject);
+    });
+  };
+
+  const addListenersModal = (category) => {
+    document.getElementById("closeModal").addEventListener("click", closeModal);
+
+    if (category === "Project") {
+      document
+        .getElementById("createProject")
+        .addEventListener("click", addProject);
+    } else if (category === "Task") {
+      document.getElementById("createTask").addEventListener("click", addTask);
+    }
+  };
+
+  const removeListenersModal = () => {
+    document
+      .getElementById("closeModal")
+      .removeEventListener("click", closeModal);
+
+    document
+      .querySelector(".modal__buttons")
+      .childNodes[0].removeEventListener("click", addProject);
+  };
+
+  const removeListenersDetails = () => {
+    const vButtons = document.querySelectorAll(".task__button ");
+    const addTaskButton = document.querySelector(".tasks__add");
+
+    addTaskButton.removeEventListener("click", drawNewTask);
+
+    if (vButtons) {
+      vButtons.forEach((e) => e.removeEventListener("click", removeTask));
+    }
   };
 
   const addListenersDetails = () => {
     const vButtons = document.querySelectorAll(".task__button ");
     const addTaskButton = document.querySelector(".tasks__add");
 
-    addTaskButton.addEventListener("click", addTask);
+    addTaskButton.addEventListener("click", drawNewTask);
 
     if (vButtons) {
-      vButtons.forEach((e) => e.addEventListener("click", deleteTask));
+      vButtons.forEach((e) => e.addEventListener("click", removeTask));
     }
   };
 
-  const addTask = (e) => {
-    //TODO
-  };
+  // Public
 
-  const deleteTask = (e) => {
-    const projName = Todo.getProject(
-      document.querySelector(".details__title").innerText
-    );
-    const taskName = e.target.id;
-    Todo.deleteTask(projName.name, taskName);
-    populateProjects();
-    highlightProject(
-      document.getElementById(
-        Todo.list[projName.name].name.replaceAll(" ", "").toLowerCase()
-      )
-    );
-    openProjectDetails(projName.name);
+  const init = () => {
+    Todo.loadList();
+    populateProjects();    
   };
-
-  const toggleProject = (e) => {
-    highlightProject(e.target.parentNode);
-  };
-
-  function assignListeners() {
-    addButton.addEventListener("click", drawNewProject);
-  }
 
   return {
-    init,
-    drawNewProject,
-    removeProject,
+    init
   };
 })();
 

@@ -1,10 +1,10 @@
 "use strict";
 
 const Components = (() => {
-  const projectItem = (project) => {
-    const projectC = projectContainer(project);
-    const projectT = projectTitle(project);
-    const projectD = projectDescription(project);    
+  const createProjectItem = (project) => {
+    const projectC = createProjectContainer(project);
+    const projectT = createProjectTitle(project);
+    const projectD = createProjectDescription(project);    
 
     projectC.appendChild(projectT);
     projectC.appendChild(projectD);    
@@ -12,7 +12,7 @@ const Components = (() => {
     return projectC;
   };
 
-  const projectContainer = (project) => {
+  const createProjectContainer = (project) => {
     const container = document.createElement("div");
     container.classList.add("aside__project");
     container.setAttribute(
@@ -22,16 +22,16 @@ const Components = (() => {
     return container;
   };
 
-  const projectTitle = (project) => {
+  const createProjectTitle = (project) => {
     const title = document.createElement("h2");
     title.classList.add("project__title");
     title.innerText = project.name;
     return title;
   };
 
-  const projectDescription = (project) => {
+  const createProjectDescription = (project) => {
     const desc = document.createElement("p");
-    const buttons = descriptionButtons()
+    const buttons = createDescriptionButtons()
     desc.classList.add("project__description");
     desc.classList.add("project__description--hidden");
     desc.innerHTML = `<ul class="project__list"> 
@@ -48,7 +48,7 @@ const Components = (() => {
     return desc;
   };
 
-  const descriptionButtons = () => {
+  const createDescriptionButtons = () => {
     const buttons = document.createElement("div");
     const vButton = document.createElement("button");
     const xButton = document.createElement("button");
@@ -65,30 +65,28 @@ const Components = (() => {
     return buttons;
   };
 
-  const projectModal = () => {
+  const createModal = (category) => {
     const modalBackground = document.createElement("div");
     const modal = document.createElement("div");
     const modalTitle = document.createElement("div");
     const modalInput = document.createElement("div");
     const modalButtons = document.createElement("buttons");
+    const modalELements = [modalTitle, modalInput, modalButtons];
 
     modalBackground.setAttribute("id", "modal");
-    modalTitle.innerHTML = `<h2 class="modal__titleText">Create new project</h2><button id="closeModal" class="modal__x">X</button>`;
-    modalInput.innerHTML = `<label for="newProjectName">Project name:</label>
-                            <input class="input__item" id="newProjectName" name="newProjectName" type="text" required>
-                            <label for="newProjectDueDate">Deadline:</label>
-                            <input id="newProjectDueDate" class="input__item" type="date" value="2022-01-01">`;
-
-    modalButtons.innerHTML = `<button id="createProject">Create!</button>`;
+    modalTitle.innerHTML = `<h2 class="modal__titleText">Create new ${category}</h2><button id="closeModal" class="modal__x">X</button>`;
+    modalInput.innerHTML = `<label for="new${category}Name">${category} name:</label>
+                            <input class="input__item" id="new${category}Name" name="new${category}Name" type="text" required>
+                            <label for="new${category}DueDate">Deadline:</label>
+                            <input id="new${category}DueDate" class="input__item" type="date" value="2022-01-01">`;
+    modalButtons.innerHTML = `<button id="create${category}">Create!</button>`;
 
     modalBackground.classList.add("modal__background");
     modalBackground.classList.add("modal--hidden");
     modal.classList.add("modal");    
     modalTitle.classList.add("modal__title");
     modalInput.classList.add("modal__input");
-    modalButtons.classList.add("modal__buttons");
-
-    const modalELements = [modalTitle, modalInput, modalButtons];
+    modalButtons.classList.add("modal__buttons");    
 
     modalELements.forEach((e) => modal.appendChild(e));
     modalBackground.appendChild(modal);
@@ -139,7 +137,7 @@ const Components = (() => {
     return tasksGrid;
   };
 
-  const tasksDetails = (tasks) => {
+  const createTasksDetails = (tasks) => {
     const tasksContainer = document.createElement("div");
     const tasksTitle = document.createElement("h3");
     const tasksGrid = createTasksGrid(tasks);
@@ -159,12 +157,12 @@ const Components = (() => {
     return tasksContainer;
   };
 
-  const projectDetails = (project) => {
+  const createProjectDetails = (project) => {
     const details = document.createElement("div");
     const detailsContainer = document.createElement("div");
     const detailsProjectTitle = document.createElement("h2");
     const detailsDueDate = document.createElement("p");
-    const tasksContainer = tasksDetails(project.tasks);
+    const tasksContainer = createTasksDetails(project.tasks);
 
     details.classList.add("details");
     detailsContainer.classList.add("details__container");
@@ -184,9 +182,9 @@ const Components = (() => {
   };
 
   return {
-    projectItem,
-    projectModal,
-    projectDetails
+    createProjectItem,
+    createModal,
+    createProjectDetails
   };
 })();
 

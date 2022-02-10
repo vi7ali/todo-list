@@ -306,12 +306,11 @@ select {
   border-radius: 15px;
   overflow: hidden;
   opacity: 1;  
-  padding: 5px 10px;  
+  padding: 5px 10px;    
 }
 
 .modal--hidden {
-  background-color: transparent;
-  transition: background-color 0.7s;
+  background-color: transparent;  
 }
 
 .modal__title {

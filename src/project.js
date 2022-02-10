@@ -3,6 +3,7 @@
 const Project = (name, dueDate) => {
   let pName = name;
   let pDueDate = dueDate;
+  let projectId = name.replaceAll(" ", "").toLowerCase();
   let tasks = [];  
 
   return {
@@ -15,15 +16,18 @@ const Project = (name, dueDate) => {
     get name() {
       return pName;
     },
-
-    get dueDate() {
-      return pDueDate;
-    },
-
     set name(newName) {
       pName = newName;
     },
-
+    get id() {
+      return projectId;
+    },
+    set id(newPId) {
+      projectId = newPId;
+    },
+    get dueDate() {
+      return pDueDate;
+    },
     set dueDate(newDate) {
       pDueDate = newDate;
     },
