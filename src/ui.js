@@ -49,12 +49,13 @@ const UI = (() => {
   const addTask = () => {
     const taskName = document.getElementById("newTaskName").value;
     const taskDueDate = document.getElementById("newTaskDueDate").value;
+    const taskDescription = document.getElementById("taskDescription").value;
     const project = Todo.getProject(
       document.querySelector(".details__title").innerText
     );
 
     if (taskName.replaceAll(" ", "") !== "") {
-      Todo.addTask(project, taskName, taskDueDate, "Bla");
+      Todo.addTask(project, taskName, taskDueDate, taskDescription);
       closeModal();
       populateProjects();
       highlightProject(project);
@@ -113,8 +114,6 @@ const UI = (() => {
     modal.remove();
   };
 
-
-
   const hideAllProjects = () => {
     const allProjects = document.querySelectorAll(".aside__project");
     allProjects.forEach((el) => {
@@ -133,8 +132,6 @@ const UI = (() => {
     main.appendChild(newDetails);
     addListenersDetails();
   };
-
-
 
   const toggleProject = (e) => {    
     const proj = Todo.getProject(e.target.innerText);
@@ -189,17 +186,6 @@ const UI = (() => {
       .childNodes[0].removeEventListener("click", addProject);
   };
 
-  const removeListenersDetails = () => {
-    const vButtons = document.querySelectorAll(".task__button ");
-    const addTaskButton = document.querySelector(".tasks__add");
-
-    addTaskButton.removeEventListener("click", drawNewTask);
-
-    if (vButtons) {
-      vButtons.forEach((e) => e.removeEventListener("click", removeTask));
-    }
-  };
-
   const addListenersDetails = () => {
     const vButtons = document.querySelectorAll(".task__button ");
     const addTaskButton = document.querySelector(".tasks__add");
@@ -208,6 +194,17 @@ const UI = (() => {
 
     if (vButtons) {
       vButtons.forEach((e) => e.addEventListener("click", removeTask));
+    }
+  };
+
+  const removeListenersDetails = () => {
+    const vButtons = document.querySelectorAll(".task__button ");
+    const addTaskButton = document.querySelector(".tasks__add");
+
+    addTaskButton.removeEventListener("click", drawNewTask);
+
+    if (vButtons) {
+      vButtons.forEach((e) => e.removeEventListener("click", removeTask));
     }
   };
 

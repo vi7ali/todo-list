@@ -301,7 +301,7 @@ select {
   flex-direction: column;
   margin: auto auto;
   width: 500px;
-  height: 250px;
+  height: auto;
   background-color: #9fa9ff;
   border-radius: 15px;
   overflow: hidden;

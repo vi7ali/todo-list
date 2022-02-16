@@ -4,10 +4,11 @@ import Storage from "./storage";
 import Project from "./project";
 import Task from "./task";
 
-const Todo = (() => {
-  let list;
+const Todo = (() => {  
 
-  // Private Methods
+  // Private
+
+  let list;
 
   const updateList = () => {
     Storage.storeList(list);
@@ -37,11 +38,11 @@ const Todo = (() => {
   };
 
   const taskExists = (project, task) => {    
-    if (list[project.name].tasks.some((t) => t.name === task)) return true;
+    if (project.tasks.some((t) => t.name === task)) return true;
     return false;
   };
 
-  //Public Methods
+  //Public
 
   const loadList = () => {
     list = Storage.retrieveList();
@@ -68,7 +69,7 @@ const Todo = (() => {
   };
 
   const getTask = (project, task) => {    
-    return list[project.name].tasks.find((t) => t.name === task);
+    return project.tasks.find((t) => t.name === task);
   };
 
   const addTask = (project, name, dueDate, description) => {
@@ -82,9 +83,9 @@ const Todo = (() => {
 
   const deleteTask = (project, task) => {    
     if (taskExists(project, task)) {
-      for (let i = 0; i < list[project.name].tasks.length; i++) {
-        if (list[project.name].tasks[i].name === task) {
-          list[project.name].tasks.splice(i, 1);
+      for (let i = 0; i < project.tasks.length; i++) {
+        if (project.tasks[i].name === task) {
+          project.tasks.splice(i, 1);
           updateList();
           break;
         }
