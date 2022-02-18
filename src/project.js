@@ -4,7 +4,7 @@ const Project = (name, dueDate) => {
   let pName = name;
   let pDueDate = dueDate;
   let projectId = name.replaceAll(" ", "").toLowerCase();
-  let tasks = [];  
+  let tasks = [];
 
   return {
     get tasks() {

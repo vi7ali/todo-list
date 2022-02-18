@@ -75,28 +75,39 @@ const Components = (() => {
     const modalTitle = document.createElement("div");
     const modalInput = document.createElement("div");
     const modalButtons = document.createElement("buttons");    
-    const modalELements = [modalTitle, modalInput, modalButtons];
+    const form = document.createElement("form");
+    const modalELements = [modalTitle, form, modalButtons];
+    
 
     modalBackground.setAttribute("id", "modal");
-    modalTitle.innerHTML = `<h2 class="modal__titleText">Create new ${category}</h2><button id="closeModal" class="modal__x">X</button>`;
-    modalInput.innerHTML = `<label for="new${category}Name">${category} name:</label>
-                            <input class="input__item" id="new${category}Name" name="new${category}Name" type="text" required>
-                            <label for="new${category}DueDate">Deadline:</label>
-                            <input id="new${category}DueDate" class="input__item" type="date" value="2022-01-01">`;
-    modalButtons.innerHTML = `<button id="create${category}">Create!</button>`;
-    
+    form.setAttribute("action", "#");
+    form.setAttribute("method", "post");
+
+    modalTitle.innerHTML = `<button id="closeModal" class="modal__x">X</button>`;
+    form.innerHTML = `      <fieldset class="modal__fieldset">
+                              <legend>Create New ${category}</legend>
+                              <ul class="modal__ul">
+                                <li class="modal__li"><label for="new${category}Name">${category} name:</label><input class="input__item" id="new${category}Name" name="new${category}Name" type="text" required></li>
+                                <li class="modal__li><label for="new${category}DueDate">Deadline:</label><input id="new${category}DueDate" class="input__item" type="date" value="2022-01-01"></li>
+                              </ul>
+                            </fieldset>
+                            `;
     if (category === "Task") {
-      modalInput.innerHTML += `<label for="taskDescription">Description: </label>
-                              <textarea id="taskDescription">To do...</textarea>`;
+      form.innerHTML += `       <label for="taskDescription">Task description:</label>
+                                <textarea id="taskDescription">To do...</textarea>
+                              `;
     }
 
+    modalButtons.innerHTML = `<button id="create${category}">Create!</button>`;
+
+    form.classList.add("modal__form");
     modalBackground.classList.add("modal__background");
     modalBackground.classList.add("modal--hidden");
     modal.classList.add("modal");
     modalTitle.classList.add("modal__title");
-    modalInput.classList.add("modal__input");
+    form.classList.add("modal__input");
     modalButtons.classList.add("modal__buttons");
-
+    
     modalELements.forEach((e) => modal.appendChild(e));
 
     modalBackground.appendChild(modal);
