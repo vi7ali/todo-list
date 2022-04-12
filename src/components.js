@@ -88,7 +88,7 @@ const Components = (() => {
                               <legend>Create New ${category}</legend>
                               <ul class="modal__ul">
                                 <li class="modal__li"><label for="new${category}Name">${category} name:</label><input class="input__item" id="new${category}Name" name="new${category}Name" type="text" required></li>
-                                <li class="modal__li><label for="new${category}DueDate">Deadline:</label><input id="new${category}DueDate" class="input__item" type="date" value="2022-01-01"></li>
+                                <li class="modal__li"><label for="new${category}DueDate">Deadline:</label><input id="new${category}DueDate" class="input__item" type="date" value="2022-01-01"></li>
                               </ul>
                             </fieldset>
                             `;

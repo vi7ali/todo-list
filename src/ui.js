@@ -54,7 +54,7 @@ const UI = (() => {
       document.querySelector(".details__title").innerText
     );
 
-    if (taskName.replaceAll(" ", "") !== "") {
+    if (taskName.replaceAll(" ", "") !== "" && !Todo.taskExists(project, taskName)) {
       Todo.addTask(project, taskName, taskDueDate, taskDescription);
       closeModal();
       populateProjects();
@@ -107,9 +107,7 @@ const UI = (() => {
   };
 
   const closeModal = () => {
-    const modal = document.getElementById("modal");    
-    window.getComputedStyle(modal).backgroundColor; // To trigger transition after appendChild
-    modal.classList.toggle("modal--hidden");    
+    const modal = document.getElementById("modal");  
     removeListenersModal();
     modal.remove();
   };
